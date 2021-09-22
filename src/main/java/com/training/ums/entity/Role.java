@@ -20,18 +20,28 @@ public class Role {
     private Long id;
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    
+    @ManyToMany
     private Collection<User> users=new ArrayList<>();
+
+    @ManyToMany
+    private Collection<Privilege>privileges;
     
     public Role() {
         
     }
 
-    public Role(Long id, String name) {
+    
+    public Role(Long id, String name, Collection<User> users, Collection<Privilege> privileges) {
         this.id = id;
         this.name = name;
+        this.users = users;
+        this.privileges = privileges;
     }
+    public Role(final String name) {
+        super();
+        this.name = name;
+    }
+
     public long getId() {
         return id;
     }
@@ -60,6 +70,14 @@ public class Role {
 
     public void setUsers(Collection<User> users) {
         this.users = users;
+    }
+
+    public Collection<Privilege> getPrivileges() {
+        return privileges;
+    }
+
+    public void setPrivileges(Collection<Privilege> privileges) {
+        this.privileges = privileges;
     }
 
     

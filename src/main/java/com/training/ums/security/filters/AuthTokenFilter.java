@@ -39,7 +39,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 			System.out.println(jwt);
 			if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
 				String username = jwtUtils.getUserNameFromJwtToken(jwt);
-				System.out.println("My user Name"+username);
+				//System.out.println("My user Name"+username);
 
 				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
@@ -57,15 +57,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
 	private String parseJwt(HttpServletRequest request) {
 		String headerAuth = request.getHeader("Authorization");
-		System.out.println(headerAuth);
+		
 
 		if (headerAuth!=null&& headerAuth.startsWith("Bearer ")) {
-			System.out.println("header success");
+			
 			return headerAuth.substring(7);
 			
 		}
-		System.out.println("header error");
-		System.out.println(request);
+		
 		return null;
 	}
 }

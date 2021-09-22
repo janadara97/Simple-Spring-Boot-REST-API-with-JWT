@@ -2,8 +2,10 @@ package com.training.ums.services;
 
 import java.util.List;
 
+import com.training.ums.entity.Privilege;
 import com.training.ums.entity.Role;
 import com.training.ums.entity.User;
+import com.training.ums.repository.PrivilegeRepository;
 import com.training.ums.repository.RoleRepository;
 import com.training.ums.repository.UserRepository;
 
@@ -17,7 +19,8 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
-
+    @Autowired
+    PrivilegeRepository privilegeRepository;
 
     @Override
     public User saveUser(User user) {
@@ -30,25 +33,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addRoleToUser(String userName, String roleName) {
-        System.out.println("myy"+userName);
-        System.out.println("myy"+roleName);
-        User user=userRepository.findByUserName(userName);
-        Role role=roleRepository.findByName(roleName);
-        
+    public Boolean addRoleToUser(String userName, String roleName) {
+        try{
+        User user = userRepository.findByUserName(userName);
+        Role role = roleRepository.findByName(roleName);
 
-        //user.getRoles().add(role);
-        System.out.println("jana"+user);
         role.getUsers().add(user);
         userRepository.save(user);
-       
-        
-        
+        return true;
+        }
+        catch(Exception e){
+            return false;
+        }
     }
 
     @Override
     public User getUser(String userName) {
-        
+
         return userRepository.findByUserName(userName);
     }
 
@@ -57,6 +58,51 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    
-    
+    @Override
+    public Privilege addPrivilege(Privilege privilege) {
+        return privilegeRepository.save(privilege);
+    }
+
+    @Override
+    public Boolean deletePrivilege(int id) {
+        try {
+            privilegeRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+        
+
+    }
+
+    @Override
+    public Boolean addRoleToPrivilege(String roleName, String privilegeName) {
+        try {
+            Role role = roleRepository.findByName(roleName);
+
+        Privilege privilege = privilegeRepository.findByPrivilegeName(privilegeName);
+
+        role.getPrivileges().add(privilege);
+
+        roleRepository.save(role);
+        return true;
+
+        } catch (Exception e) {
+            return false;
+        }
+
+        
+
+    }
+
+    @Override
+    public User deleteUser(long  id) {
+        return userRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Privilege> getPrivileges( ) {
+        return privilegeRepository.findAll();
+    }
+
 }

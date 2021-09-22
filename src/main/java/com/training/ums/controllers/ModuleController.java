@@ -1,6 +1,7 @@
 package com.training.ums.controllers;
 import java.util.List;
 
+import com.training.ums.apiResponse;
 import com.training.ums.dto.ModuleConverter;
 import com.training.ums.dto.ModuleDto;
 import com.training.ums.entity.Modules;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/modules")
+@CrossOrigin("http://localhost:8080/")
+//@RequestMapping("/modules")
 public class ModuleController {
 
 
@@ -31,49 +34,48 @@ public class ModuleController {
     private ModuleConverter moduleConverter;
     
     @RequestMapping("/getModules")
-    @Secured({"ROLE_ADMIN","ROLE_LECTURER"})
+   
     public ResponseEntity <?> getAllModules()
     {
     List<Modules>list=moduleService.getAlModules();
 
         if(list.isEmpty())
         {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok().body(new apiResponse(false, "List is Empty", null));
         }
         else
         {
-            return ResponseEntity.ok().body(moduleConverter.entityToDto(list));
+            return ResponseEntity.ok().body(new apiResponse(true, "Data Fetched Successfully", moduleConverter.entityToDto(list)));
         }
 
         
     }
 
     @PostMapping("/addModules")
-    @Secured({"ROLE_ADMIN","ROLE_LECTURER"})
+   // @Secured({"ROLE_ADMIN","ROLE_LECTURER"})
     public ResponseEntity<?> addModules(@RequestBody ModuleDto moduleDto)
     {
         Modules module=null;
         try 
         {
-            System.out.println(module);
-            System.out.println(moduleDto);
+         
             module=moduleConverter.dtoToEntity(moduleDto);
-            System.out.println(module);
+           
             module=moduleService.addModules(module);
-            System.out.println(module);
-            return ResponseEntity.ok(moduleConverter.entityToDto(module));
+          
+            return ResponseEntity.ok(new apiResponse(true, "Module added successfully", moduleConverter.entityToDto(module)));
         } 
         catch (Exception e) 
         {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.ok().body(new apiResponse(false, "Unsuccessful", null));
         }
         
         
         }
 
         @PutMapping("/updateModule/{id}")
-        @Secured({"ROLE_ADMIN","ROLE_LECTURER"})
+     
         public ResponseEntity<?> updatetopicurer(@PathVariable int id,@RequestBody ModuleDto moduleDto)
         {
             Modules module=null;
@@ -81,47 +83,47 @@ public class ModuleController {
             {
                module=moduleConverter.dtoToEntity(moduleDto);
                module=moduleService.updateModules(id, module);
-               return ResponseEntity.ok(moduleConverter.entityToDto(module));
+               return ResponseEntity.ok(new apiResponse(true, "Module updated successfully", moduleConverter.entityToDto(module)));
             } 
             catch (Exception e) 
             {
                 e.printStackTrace();
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                return ResponseEntity.ok().body(new apiResponse(false,"Unsuccessful", null));
             }
         }
 
         @DeleteMapping("deleteModule/{id}")
-        @Secured({"ROLE_ADMIN","ROLE_LECTURER"})
+       
         public ResponseEntity<?> deletetopicurer(@PathVariable int id)
         {
             Modules module=null;
             try 
             {
                 module=moduleService.deletModules(id);
-                return ResponseEntity.ok().body(module);
+                return ResponseEntity.ok().body(new apiResponse(true, "Successfully Deleted", null));
             } 
             catch (Exception e) 
             {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                return ResponseEntity.ok().body(new apiResponse(false, "Unsuccessful", null));
             }
            
         }
 
         @PostMapping(
         value = "/addModules/{lectId}")
-        @Secured({"ROLE_ADMIN","ROLE_LECTURER"})
+        
         public ResponseEntity <?> addTopic(@RequestBody ModuleDto moduleDto,@PathVariable int lectId)
         {
             Modules module=null;
         try 
         {   module=moduleConverter.dtoToEntity(moduleDto);
             module=moduleService.addModulesByLectId(module, lectId);
-            return ResponseEntity.ok(moduleConverter.entityToDto(module));
+            return ResponseEntity.ok().body(new apiResponse(true, "Module successfully added", moduleConverter.entityToDto(module)));
         }    
         catch (Exception e) 
         {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.ok().body(new apiResponse(false, "Unsuccessful", null));
         }
            
         }

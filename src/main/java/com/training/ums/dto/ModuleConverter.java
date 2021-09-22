@@ -40,7 +40,7 @@ public class ModuleConverter {
         modules.setModuleId(moduleDto.getModuleId());
         modules.setModuleName(moduleDto.getModuleName());
         modules.setModuleDes(moduleDto.getModuleDes());
-        modules.setModuleCredits(modules.getModuleCredits());
+        modules.setModuleCredits(moduleDto.getModuleCredits());
         return modules;
     }
 

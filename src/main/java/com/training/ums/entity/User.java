@@ -20,7 +20,7 @@ public class User {
     private String userName;
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER,mappedBy = "users")
+    @ManyToMany(mappedBy = "users")
     // @JoinTable(joinColumns = {@JoinColumn(name = "user_id") },
     // inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Collection<Role> roles=new ArrayList<>();

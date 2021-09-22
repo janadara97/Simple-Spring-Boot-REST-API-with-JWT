@@ -7,7 +7,7 @@ public class UserDto {
     private String name;
     private String userName;
     private String password;
-    private Set<String> roleNames;
+    private Set<String> roles;
 
     
      
@@ -19,7 +19,7 @@ public class UserDto {
         this.name = name;
         this.userName = userName;
         this.password = password;
-        this.roleNames = roleNames;
+        this.roles = roleNames;
     }
     public long getId() {
         return id;
@@ -46,14 +46,14 @@ public class UserDto {
         this.password = password;
     }
     public Set<String> getRoleNames() {
-        return roleNames;
+        return roles;
     }
     public void setRoleNames(Set<String> roleNames) {
-        this.roleNames = roleNames;
+        this.roles = roleNames;
     }
     @Override
     public String toString() {
-        return "UserDto [id=" + id + ", name=" + name + ", password=" + password + ", roleNames=" + roleNames
+        return "UserDto [id=" + id + ", name=" + name + ", password=" + password + ", roleNames=" + roles
                 + ", userName=" + userName + "]";
     }
 

@@ -6,17 +6,21 @@ import java.util.stream.Collectors;
 
 import com.training.ums.entity.User;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserConverter {
+    @Autowired
+    PasswordEncoder passwordEncoder;
     
 
     public UserDto entityToDto(User user){
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setName(user.getName());
-        userDto.setUserName(user.getUserName());
+        userDto.setUserName((user.getUserName()));
        
         if(user.getRoles()==null){
             return userDto;
@@ -38,7 +42,7 @@ public class UserConverter {
         user.setId(userDto.getId());
         user.setName(userDto.getName());
         user.setUserName(userDto.getUserName());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return user;
     }
 

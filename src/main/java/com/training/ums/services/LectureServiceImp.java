@@ -29,6 +29,7 @@ public  class LectureServiceImp implements LecturerService{
                throw new EmptyListException("601", "The System Does Not Have Any Lecturers List Now");
             }
             return lecturers;
+            
         }
         
     

@@ -2,6 +2,7 @@ package com.training.ums.controllers;
 
 import java.util.List;
 
+import com.training.ums.apiResponse;
 import com.training.ums.dto.LecturerConverter;
 import com.training.ums.dto.ModuleConverter;
 import com.training.ums.dto.TopicsConverter;
@@ -14,7 +15,7 @@ import com.training.ums.services.TopicService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,68 +42,71 @@ public class StudentController {
 
     @Autowired
     TopicsConverter topicsConverter;
+
+    private String dnf="Data Not Found";
+    private String fds="Data Fetched Successfully";
     
     @GetMapping("/getAllModules")
-    @Secured({"ROLE_STUDENT"})
+   
     public ResponseEntity<?> gettAllModules(){
         List<Modules>list=moduleService.getAlModules();
 
         if(list.isEmpty())
         {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok().body(new apiResponse(false, dnf, null));
         }
         else
         {
-            return ResponseEntity.ok().body(moduleConverter.entityToDto(list));
+            return ResponseEntity.ok().body(new apiResponse(true, fds, moduleConverter.entityToDto(list)));
         }
     }
     @GetMapping("/getAllLect")
-    @Secured({"ROLE_STUDENT"})
+   
     public ResponseEntity <?> getAllLecturer()
     {
     List<Lecturers>list=lecturerService.getAlLecturers();
 
     if(list.isEmpty())
         {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok().body(new apiResponse(false, dnf, null));
         }
         else
         {
-            return ResponseEntity.ok().body(lecturerConverter.entityToDto(list));
+            return ResponseEntity.ok().body(new apiResponse(true, fds, lecturerConverter.entityToDto(list)));
             
         }
     }
 
     @RequestMapping("/getAllTopics")
-    @Secured({"ROLE_STUDENT"})
+    
     public ResponseEntity <?> getAllTopics() 
     {
     List<Topics>list=topicService.getAllTopics();
 
         if(list.isEmpty())
         {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok().body(new apiResponse(false, dnf, null));
         }
         else
         {
-            return ResponseEntity.ok().body(topicsConverter.entityToDto(list));
+            return ResponseEntity.ok().body(new apiResponse(true, fds, topicsConverter.entityToDto(list)));
         }
  
     }
 
     @RequestMapping("/getTopics/{moduleId}") 
-    @Secured({"ROLE_ADMIN","ROLE_LECTURER","ROLE_STUDENT"})
-    public ResponseEntity <?> getAllTopics(@PathVariable int moduleId) throws Exception
+   
+    public ResponseEntity <?> getAllTopics(@PathVariable int moduleId) 
     {
     List<Topics>list=topicService.getTopicsByModule(moduleId);
 
         if(list.isEmpty())
         {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok().body(new apiResponse(false, dnf, null));
         }
         else
         {
-            return ResponseEntity.ok().body(topicsConverter.entityToDto(list));
+            return ResponseEntity.ok().body(new apiResponse(true,fds,topicsConverter.entityToDto(list)));
             
         }
     }

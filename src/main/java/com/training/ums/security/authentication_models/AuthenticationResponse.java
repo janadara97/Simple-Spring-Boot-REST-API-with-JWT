@@ -5,27 +5,56 @@ import java.util.List;
 public class AuthenticationResponse {
 
     private final String jwt;
-    private List<String> roles;
+    private final String UserName;
+    private  final Boolean success;
+    private final String message;
+    private final List<String> privileges;
 
     
 
     
+    
 
-    public AuthenticationResponse(String jwt, List<String> roles) {
+    
+
+    public AuthenticationResponse(String jwt, String userName, Boolean success, String message,
+            List<String> privileges) {
         this.jwt = jwt;
-        this.roles = roles;
+        UserName = userName;
+        this.success = success;
+        this.message = message;
+        this.privileges = privileges;
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public Boolean getSuccess() {
+        return success;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+   
+
+    public String getMessage() {
+        return message;
     }
+
+   
+    public List<String> getPrivileges() {
+        return privileges;
+    }
+
+    
+
+   
+
+    
+
+   
 
     public String getJwt() {
         return jwt;
+    }
+
+    public String getUserName() {
+        return UserName;
     }
 
     

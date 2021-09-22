@@ -1,6 +1,7 @@
 package com.training.ums.controllers;
 import java.util.List;
 
+import com.training.ums.apiResponse;
 import com.training.ums.dto.LecturerConverter;
 import com.training.ums.dto.LecturerDto;
 import com.training.ums.entity.Lecturers;
@@ -29,18 +30,18 @@ public class LecturersController {
 
     
     @RequestMapping("/getAllLect")
-    @Secured({"ROLE_ADMIN","ROLE_LECTURER"})
+   // @Secured({"ROLE_ADMIN","ROLE_LECTURER"})
     public ResponseEntity <?> getAllLecturer()
     {
     List<Lecturers>list=lecturerService.getAlLecturers();
 
     if(list.isEmpty())
         {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok().body(new apiResponse(false,"Lecture List is Empty",null));
         }
         else
         {
-            return ResponseEntity.ok().body(converter.entityToDto(list));
+            return ResponseEntity.ok().body(new apiResponse(true, "Data Fetch is Completed", converter.entityToDto(list)) );
             
         }
 
@@ -48,7 +49,7 @@ public class LecturersController {
     }
 
     @PostMapping("/addLect")
-    @Secured({"ROLE_ADMIN","ROLE_LECTURER"})
+    //@Secured({"ROLE_ADMIN","ROLE_LECTURER"})
     public ResponseEntity<?> addLecturer(@RequestBody LecturerDto lecturerDto)
     
     {
@@ -58,18 +59,18 @@ public class LecturersController {
     {   
        lect=converter.dtoToEntity(lecturerDto);
        lect=lecturerService.addLecturers(lect);
-       return ResponseEntity.ok(converter.entityToDto(lect));
+       return ResponseEntity.ok(new apiResponse(true, "Lecture Added Successfully", converter.entityToDto(lect)) );
     } 
     catch (Exception e) 
     {
         e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        return ResponseEntity.ok().body(new apiResponse(false,"Unsuccessfull", null));
     }
        
     }
 
     @PutMapping("/updateLect/{id}")
-    @Secured({"ROLE_ADMIN","ROLE_LECTURER"})
+    //@Secured({"ROLE_ADMIN","ROLE_LECTURER"})
     public ResponseEntity<?> updateLecturer(@PathVariable int id,@RequestBody LecturerDto lecturerDto)
     {
         Lecturers lect=null;
@@ -77,12 +78,12 @@ public class LecturersController {
         {   
             lect=converter.dtoToEntity(lecturerDto);
             lect=lecturerService.updateLecturers(id, lect);
-            return ResponseEntity.ok(converter.entityToDto(lect));
+            return ResponseEntity.ok().body(new apiResponse(true, "Lecturer Updated Successfully", converter.entityToDto(lect)));
         } 
         catch (Exception e) 
         {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.ok().body(new apiResponse(false, "Unsuccessfull", null));
         }
 
         
@@ -90,19 +91,19 @@ public class LecturersController {
     }
 
     @DeleteMapping("deleteLect/{id}")
-    @Secured({"ROLE_ADMIN","ROLE_LECTURER"})
+   // @Secured({"ROLE_ADMIN","ROLE_LECTURER"})
     public ResponseEntity<?> deleteLecturer(@PathVariable int id)
     {
 
         
         try 
         {   
-           return ResponseEntity.ok(lecturerService.deletLecturers(id));
+           return ResponseEntity.ok().body(new apiResponse(true, "Lecture Deleted Successfully", lecturerService.deletLecturers(id)));
         } 
         catch (Exception e) 
         {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.ok().body(new apiResponse(false,"Unsuccessful",null));
         }
 
 
